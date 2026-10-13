@@ -10,7 +10,6 @@
 from __future__ import annotations
 
 import textwrap
-from typing import Type
 
 from components.crowsnest.crowsnest import install_crowsnest
 from components.klipper.services.klipper_setup_service import KlipperSetupService
@@ -33,15 +32,15 @@ from core.types.color import Color
 # noinspection PyUnusedLocal
 # noinspection PyMethodMayBeStatic
 class InstallMenu(BaseMenu):
-    def __init__(self, previous_menu: Type[BaseMenu] | None = None) -> None:
+    def __init__(self, previous_menu: type[BaseMenu] | None = None) -> None:
         super().__init__()
         self.title = "Installation Menu"
         self.title_color = Color.GREEN
-        self.previous_menu: Type[BaseMenu] | None = previous_menu
+        self.previous_menu: type[BaseMenu] | None = previous_menu
         self.klsvc = KlipperSetupService()
         self.mrsvc = MoonrakerSetupService()
 
-    def set_previous_menu(self, previous_menu: Type[BaseMenu] | None) -> None:
+    def set_previous_menu(self, previous_menu: type[BaseMenu] | None) -> None:
         from core.menus.main_menu import MainMenu
 
         self.previous_menu = previous_menu if previous_menu is not None else MainMenu
@@ -56,6 +55,8 @@ class InstallMenu(BaseMenu):
             "6": Option(method=self.install_fluidd_config),
             "7": Option(method=self.install_klipperscreen),
             "8": Option(method=self.install_crowsnest),
+            "9": Option(method=self.install_printer_profile),
+            "10": Option(method=self.restore_from_backup),
         }
 
     def print_menu(self) -> None:
@@ -74,6 +75,9 @@ class InstallMenu(BaseMenu):
             ║  5) [Mainsail-Config]     │                           ║
             ║  6) [Fluidd-Config]       │                           ║
             ╟───────────────────────────┴───────────────────────────╢
+            ║  9) [HerrHaseGermany Printer Profile]                 ║
+            ║ 10) [Config aus Backup wiederherstellen]             ║
+            ╟───────────────────────────────────────────────────────╢
             """
         )[1:]
         print(menu, end="")
@@ -109,3 +113,13 @@ class InstallMenu(BaseMenu):
 
     def install_crowsnest(self, **kwargs) -> None:
         install_crowsnest()
+
+    def install_printer_profile(self, **kwargs) -> None:
+        from core.menus.printer_profile_menu import PrinterProfileMenu
+
+        PrinterProfileMenu(self.__class__).run()
+
+    def restore_from_backup(self, **kwargs) -> None:
+        from core.menus.printer_profile_menu import restore_from_backup
+
+        restore_from_backup()

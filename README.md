@@ -1,3 +1,7 @@
+## Custom printer profile
+
+This fork adds a HerrHaseGermany printer installation profile based on the Moonraker update manager and configuration restore from KlipperBackup. See the [German setup and restore guide](docs/printer-profile.md).
+
 <p align="center">
     <img src="docs/assets/logo-large.png" alt="KIAUH Logo" height="181">
     <h1 align="center">Klipper Installation And Update Helper</h1>

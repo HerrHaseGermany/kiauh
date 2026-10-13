@@ -10,7 +10,6 @@
 from __future__ import annotations
 
 import textwrap
-from typing import Type
 
 from components.klipper.klipper_utils import backup_klipper_dir
 from components.klipperscreen.klipperscreen import backup_klipperscreen_dir
@@ -33,13 +32,13 @@ from core.types.color import Color
 # noinspection PyUnusedLocal
 # noinspection PyMethodMayBeStatic
 class BackupMenu(BaseMenu):
-    def __init__(self, previous_menu: Type[BaseMenu] | None = None) -> None:
+    def __init__(self, previous_menu: type[BaseMenu] | None = None) -> None:
         super().__init__()
         self.title = "Backup Menu"
         self.title_color = Color.GREEN
-        self.previous_menu: Type[BaseMenu] | None = previous_menu
+        self.previous_menu: type[BaseMenu] | None = previous_menu
 
-    def set_previous_menu(self, previous_menu: Type[BaseMenu] | None) -> None:
+    def set_previous_menu(self, previous_menu: type[BaseMenu] | None) -> None:
         from core.menus.main_menu import MainMenu
 
         self.previous_menu = previous_menu if previous_menu is not None else MainMenu
@@ -55,6 +54,7 @@ class BackupMenu(BaseMenu):
             "7": Option(method=self.backup_mainsail_config),
             "8": Option(method=self.backup_fluidd_config),
             "9": Option(method=self.backup_klipperscreen),
+            "10": Option(method=self.restore_from_backup),
         }
 
     def print_menu(self) -> None:
@@ -76,6 +76,8 @@ class BackupMenu(BaseMenu):
             ║  5) [Mainsail]            │                           ║
             ║  6) [Fluidd]              │                           ║
             ╟───────────────────────────┴───────────────────────────╢
+            ║ 10) [Config aus Backup wiederherstellen]             ║
+            ╟───────────────────────────────────────────────────────╢
             """
         )[1:]
         print(menu, end="")
@@ -106,3 +108,8 @@ class BackupMenu(BaseMenu):
 
     def backup_klipperscreen(self, **kwargs) -> None:
         backup_klipperscreen_dir()
+
+    def restore_from_backup(self, **kwargs) -> None:
+        from core.menus.printer_profile_menu import restore_from_backup
+
+        restore_from_backup()
